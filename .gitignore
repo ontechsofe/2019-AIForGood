@@ -1,0 +1,3 @@
+__pycache__
+*.hide.*
+server/vision/data
