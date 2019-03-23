@@ -3,6 +3,12 @@
         <v-toolbar color="primary" dark fixed app>
             <v-icon>public</v-icon>
             <v-toolbar-title>TrashSort</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <v-btn flat fab primary @click="openDialogLeaderboard">
+                    <v-icon>poll</v-icon>
+                </v-btn>
+            </v-toolbar-items>
         </v-toolbar>
         <v-content>
             <v-dialog v-model="confirm_dialog" persistent max-width="290">
@@ -41,6 +47,31 @@
                     </div>
                 </v-card>
             </v-dialog>
+            <v-dialog v-model="dialog_leaderboard" fullscreen hide-overlay transition="dialog-bottom-transition">
+                <v-card>
+                    <v-toolbar dark color="primary">
+                        <v-btn icon dark @click="closeDialogLeaderboard">
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title>Leaderboard</v-toolbar-title>
+                    </v-toolbar>
+                    <v-data-table v-model="selected" :headers="headers" :items="cities" select-all item-key="name" class="elevation-1" hide-actions>
+                        <template v-slot:headers="props">
+                            <tr>
+                                <th v-for="header in props.headers" :key="header.text">
+                                    {{ header.text }}
+                                </th>
+                            </tr>
+                        </template>
+                        <template v-slot:items="props">
+                            <tr :active="props.selected" @click="props.selected = !props.selected">
+                                <td>{{ props.item.name }}</td>
+                                <td class="text-xs-right">{{ props.item.count }}</td>
+                            </tr>
+                        </template>
+                    </v-data-table>
+                </v-card>
+            </v-dialog>
             <div id="camera">
                 <video id="camera--view" autoplay playsinline></video>
                 <button id="camera--trigger" @click="clickTrigger">Take a picture</button>
@@ -57,12 +88,27 @@
         data: () => ({
             dialog: null,
             confirm_dialog: null,
+            dialog_leaderboard: null,
             cameraView: null,
             cameraOutput: null,
             cameraSensor: null,
             cameraTrigger: null,
             p: null,
-            guess_value: ""
+            guess_value: "",
+            pagination: {
+                sortBy: 'name'
+            },
+            selected: [],
+            headers: [
+                { text: 'City', align: 'left', value: 'name' },
+                { text: 'Count', value: 'count' }
+            ],
+            cities: [
+                {
+                    name: 'Whitby',
+                    count: 10,
+                }
+            ]
         }),
         mounted() {
             this.cameraView = document.querySelector("#camera--view")
@@ -83,6 +129,12 @@
             closeDialog() {
                 this.dialog = false
                 this.p = false
+            },
+            openDialogLeaderboard() {
+                this.dialog_leaderboard = true
+            },
+            closeDialogLeaderboard() {
+                this.dialog_leaderboard = false
             },
             clickConfirm() {
                 this.p = true
