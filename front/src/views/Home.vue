@@ -140,7 +140,7 @@
                 this.p = true
                 axios({
                     method: 'post',
-                    url: 'http://localhost:5000/vision',
+                    url: 'http://127.0.0.1:5000/vision',
                     data: {
                         'image': this.cameraSensor.toDataURL("image/jpeg"),
                         'can_id': 0
@@ -157,7 +157,7 @@
                 }).catch((error) => {
                     this.dialog = true
                     this.p = false
-                    console.error(error)
+                    console.error(error.response)
                 })
             },
             closeSecondConfirm() {
