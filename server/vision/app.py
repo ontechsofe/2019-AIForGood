@@ -40,10 +40,10 @@ def prediction(b64):
         conn = http.client.HTTPSConnection(
             'southcentralus.api.cognitive.microsoft.com')
         b64 = b64.split(',')
-        with open('temp.jpg', "wb") as fh:
+        with open('temp.hide.jpg', "wb") as fh:
             fh.write(base64.b64decode(b64[1]))
 
-        f = open('temp.jpg', 'rb', buffering=0)
+        f = open('temp.hide.jpg', 'rb', buffering=0)
         
         conn.request("POST", "/customvision/v1.0/Prediction/14375ed8-f31f-4115-ace3-6c70d2eabcf3/image?%s" %
                      params, f.readall(), headers)
