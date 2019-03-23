@@ -17,9 +17,11 @@ def root():
 
 @app.route('/vision', methods=['POST'])
 def vision():
-    # print(request.form)
-    # print(request.form['image'])
-    return prediction(request.form['image'])
+    data = dict()
+    data['can_id'] = request.form['can_id']
+    data['trash_item'] = prediction(request.form['image'])
+    json_data = json.dumps(data)
+    return data['trash_item']
 
 
 def prediction(b64):
@@ -37,25 +39,19 @@ def prediction(b64):
     try:
         conn = http.client.HTTPSConnection(
             'southcentralus.api.cognitive.microsoft.com')
-        # print(b64)
-        # f = open('data/JPEG_20190322_175157.jpg', 'rb', buffering=0)
-        # b64 = base64.b64encode(f.read()).split(',')
-        # print(b64[])
         b64 = b64.split(',')
         with open('temp.jpg', "wb") as fh:
             fh.write(base64.b64decode(b64[1]))
 
         f = open('temp.jpg', 'rb', buffering=0)
-
+        
         conn.request("POST", "/customvision/v1.0/Prediction/14375ed8-f31f-4115-ace3-6c70d2eabcf3/image?%s" %
                      params, f.readall(), headers)
         response = conn.getresponse()
-        data = response.read()
-        # data = json.load(data)
-        conn.close()
-        return data
+        data = json.loads(response.read().decode("utf-8"))
+
+        return data['Predictions'][0]['Tag']
     except Exception as e:
-        # print ("[Errno {0}] {1}". format (e. errno, e. strerror))
         print(e)
 
 
