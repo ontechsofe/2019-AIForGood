@@ -13,7 +13,7 @@ class Waste(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_type = db.Column(db.String(250), nullable=True)
     creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
-    garbage_can_id = db.Column(db.Integer, db.ForeignKey('Can.id', ondelete='CASCADE'), nullable=False)
+    garbage_can_id = db.Column(db.Integer, db.ForeignKey('Garbage_Can.id', ondelete='CASCADE'), nullable=False)
 
 
     def __init__(self, waste, garbage_can_id):
