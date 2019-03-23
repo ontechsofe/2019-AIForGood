@@ -138,26 +138,27 @@
             },
             clickConfirm() {
                 this.p = true
+                let formData = new FormData()
+                formData.set('image', this.cameraSensor.toDataURL("image/jpeg"))
+                formData.set('can_id', 0)
                 axios({
                     method: 'post',
-                    url: 'http://127.0.0.1:5000/vision',
-                    data: {
-                        'image': this.cameraSensor.toDataURL("image/jpeg"),
-                        'can_id': 0
-                    },
+                    url: 'http://localhost:5000/vision',
+                    data: formData,
                     headers: {
-                        'content-type': 'multipart/form-data;'
+                        'Content-Type': 'multipart/form-data'
                     }
                 }).then((response) => {
                     this.confirm_dialog = true
-                    this.guess_value = ""
+                    this.guess_value = `I think this is ${response.data.trash_item}.`
                     this.dialog = false
                     this.p = false
-                    console.log(response)
+                    console.log(response.data)
                 }).catch((error) => {
                     this.dialog = true
                     this.p = false
-                    console.error(error.response)
+                    console.log("ERROR IN HTTP REQUEST")
+                    console.error(error)
                 })
             },
             closeSecondConfirm() {
