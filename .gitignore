@@ -1,0 +1,3 @@
+*.hide.*
+data
+__pycache__
