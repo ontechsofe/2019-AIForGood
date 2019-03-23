@@ -30,7 +30,7 @@ def vision():
 def prediction(b64):
     headers = {
         # Request headers
-        'Content-Type': 'multipart / form-data',
+        'Content-Type': 'multipart/form-data',
         'Prediction-key': '4128a622079d4a5381c7a9267528a750',
     }
 
