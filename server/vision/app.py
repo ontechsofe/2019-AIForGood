@@ -21,7 +21,10 @@ def vision():
     data['can_id'] = request.form['can_id']
     data['trash_item'] = prediction(request.form['image'])
     json_data = json.dumps(data)
-    return data['trash_item']
+
+
+
+    return json_data
 
 
 def prediction(b64):
