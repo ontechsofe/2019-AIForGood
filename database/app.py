@@ -1,6 +1,8 @@
 from flask import Flask, request
-from bin import Bin
+from resources.bin import Bin
+import json
 
+bins = []
 categories = dict()
 categories['Can'] = 0
 categories['Paper'] = 1
@@ -11,12 +13,12 @@ app = Flask(__name__)
 b = None
 @app.route('/')
 def root():
-    b = Bin('Whitby', 0)
+    bins.append(Bin('Whitby', 0))
     return 'Welcome to root directory.'
 
-@app.route('/api/waste', methods['GET', 'POST'])
+@app.route('/api/waste', methods=['GET', 'POST'])
 def throw_out():
-    b.new_garbage(request.data['trash_item'])
+    bins[0].new_garbage(json.loads(request.data.decode('utf-8'))['trash_item'])
     
 
 if __name__ == "__main__":

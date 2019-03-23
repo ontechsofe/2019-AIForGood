@@ -1,10 +1,10 @@
 from random import randint
-from waste import Waste
+from .waste import Waste
 class Bin:
     def __init__(self, l, id=None):
         self.id = id if id else randint(100000, 999999)
         self.loc = l
-        self.num_waste[0, 0, 0, 0]
+        self.num_waste = [0, 0, 0, 0]
         self.waste = []
         self.filled = [False, False, False, False]
         print(self.all_filled())
@@ -31,7 +31,7 @@ class Bin:
     def set_filled(self, category, value=True):
         self.filled[category] = value
 
-    def new_garbage(self, category)
+    def new_garbage(self, category):
         self.waste.append(Waste(self.get_id(), category))
         num_waste[category] += 1
     
