@@ -58,7 +58,7 @@ def prediction(b64):
 def send_server(json_data):
     conn = http.client.HTTPConnection(
         '127.0.0.1', port=5001)
-    conn.request('POST', '/api/Waste', json_data)
+    conn.request('POST', '/api/waste', json_data)
     conn.close()
 
 if __name__ == '__main__':
