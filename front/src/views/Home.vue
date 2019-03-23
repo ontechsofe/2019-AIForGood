@@ -138,9 +138,16 @@
             },
             clickConfirm() {
                 this.p = true
-                axios.post('http://localhost:5000/vision', {
-                    image: this.cameraSensor.toDataURL("image/jpeg"),
-                    can_id: 0
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:5000/vision',
+                    data: {
+                        'image': this.cameraSensor.toDataURL("image/jpeg"),
+                        'can_id': 0
+                    },
+                    headers: {
+                        'content-type': 'multipart/form-data;'
+                    }
                 }).then((response) => {
                     this.confirm_dialog = true
                     this.guess_value = ""
