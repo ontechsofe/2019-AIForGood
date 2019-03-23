@@ -150,10 +150,10 @@
                     }
                 }).then((response) => {
                     this.confirm_dialog = true
-                    this.guess_value = ""
+                    this.guess_value = `I think this is ${response.data.trash_item}.`
                     this.dialog = false
                     this.p = false
-                    console.log(response)
+                    console.log(response.data)
                 }).catch((error) => {
                     this.dialog = true
                     this.p = false
