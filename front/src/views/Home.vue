@@ -138,15 +138,15 @@
             },
             clickConfirm() {
                 this.p = true
+                let formData = new FormData()
+                formData.set('image', this.cameraSensor.toDataURL("image/jpeg"))
+                formData.set('can_id', 0)
                 axios({
                     method: 'post',
                     url: 'http://localhost:5000/vision',
-                    data: {
-                        'image': this.cameraSensor.toDataURL("image/jpeg"),
-                        'can_id': 0
-                    },
+                    data: formData,
                     headers: {
-                        'content-type': 'multipart/form-data;'
+                        'Content-Type': 'multipart/form-data'
                     }
                 }).then((response) => {
                     this.confirm_dialog = true
@@ -157,6 +157,7 @@
                 }).catch((error) => {
                     this.dialog = true
                     this.p = false
+                    console.log("ERROR IN HTTP REQUEST")
                     console.error(error)
                 })
             },
