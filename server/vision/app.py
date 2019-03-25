@@ -9,6 +9,9 @@ import base64
 import json
 import serial
 
+ser = serial.Serial('/dev/ttyACM1', 9600)
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -19,10 +22,20 @@ def root():
 
 @app.route('/vision', methods=['POST'])
 def vision():
+    categories = dict()
+    categories['Can'] = 1
+    categories['Paper'] = 2
+    categories['Plastic'] = 3
+    categories['Garbage'] = 4
     data = dict()
     data['can_id'] = request.form['can_id']
-    print(data['can_id'])
     data['trash_item'] = prediction(request.form['image'])
+    print(data['trash_item'])
+    id_bin = str(categories[data['trash_item']])
+    print(id_bin)
+    ser.write(id_bin.encode())
+    
+
     json_data = json.dumps(data)
     # send_server(json_data)
     return json_data
