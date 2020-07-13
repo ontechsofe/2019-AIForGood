@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 import io
 import http.client
 import urllib.request
@@ -6,9 +7,13 @@ import urllib.parse
 import urllib.error
 import base64
 import json
+import serial
+
+ser = serial.Serial('/dev/ttyACM1', 9600)
+
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def root():
@@ -17,11 +22,22 @@ def root():
 
 @app.route('/vision', methods=['POST'])
 def vision():
+    categories = dict()
+    categories['Can'] = 1
+    categories['Paper'] = 2
+    categories['Plastic'] = 3
+    categories['Garbage'] = 4
     data = dict()
     data['can_id'] = request.form['can_id']
     data['trash_item'] = prediction(request.form['image'])
+    print(data['trash_item'])
+    id_bin = str(categories[data['trash_item']])
+    print(id_bin)
+    ser.write(id_bin.encode())
+    
+
     json_data = json.dumps(data)
-    send_server(json_data)
+    # send_server(json_data)
     return json_data
 
 
@@ -43,7 +59,7 @@ def prediction(b64):
         b64 = b64.split(',')
         with open('temp.hide.jpg', "wb") as fh:
             fh.write(base64.b64decode(b64[1]))
-
+        print(b64[0])
         f = open('temp.hide.jpg', 'rb', buffering=0)
 
         conn.request('POST', '/customvision/v1.0/Prediction/14375ed8-f31f-4115-ace3-6c70d2eabcf3/image?%s' %
